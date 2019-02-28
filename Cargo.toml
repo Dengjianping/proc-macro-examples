@@ -1,0 +1,19 @@
+[package]
+name = "proc_macro_example"
+version = "0.1.0"
+authors = ["Jamie <djptux@gmail.com>"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+path = "src/lib.rs"
+
+[[bin]]
+name = "proc-macro"
+doc = false
+path = "src/main.rs"
+
+[dependencies]
+syn = { version = "0.15", features = ["full", "derive", "extra-traits"] }
+quote = "0.6"
+proc-macro2 = "0.4"
