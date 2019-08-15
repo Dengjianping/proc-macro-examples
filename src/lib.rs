@@ -69,11 +69,11 @@ pub fn derive_show(item: TokenStream) -> TokenStream {
 #[proc_macro_attribute]
 pub fn rust_decorator(attr: TokenStream, func: TokenStream) -> TokenStream {
     let func = parse_macro_input!(func as ItemFn); // 我们传入的是一个函数，所以要用到ItemFn
-    let func_name = &func.ident; // 函数名
     let func_vis = &func.vis; // pub
-    let func_decl = &func.decl; // 函数申明
     let func_block = &func.block; // 函数主体实现部分{}
 
+    let func_decl = &func.sig; // 函数申明
+    let func_name = &func_decl.ident; // 函数名
     let func_generics = &func_decl.generics; // 函数泛型
     let func_inputs = &func_decl.inputs; // 函数输入参数
     let func_output = &func_decl.output; // 函数返回
@@ -83,7 +83,7 @@ pub fn rust_decorator(attr: TokenStream, func: TokenStream) -> TokenStream {
         match i {
             // 提取形参的pattern
             // https://docs.rs/syn/0.15.26/syn/enum.Pat.html
-            FnArg::Captured(ref val) => &val.pat, // pat没有办法移出val，只能借用，或者val.pat.clone()
+            FnArg::Typed(ref val) => &val.pat, // pat没有办法移出val，只能借用，或者val.pat.clone()
             _ => unreachable!("it's not gonna happen."),
         }
     }).collect();
@@ -92,7 +92,7 @@ pub fn rust_decorator(attr: TokenStream, func: TokenStream) -> TokenStream {
     let attr = parse_macro_input!(attr as AttributeArgs);
     // 提取attr的ident，此处例子只有一个attribute
     let attr_ident = match attr.get(0).as_ref().unwrap() {
-        NestedMeta::Meta(Meta::Word(ref attr_ident)) => attr_ident.clone(),
+        NestedMeta::Meta(Meta::Path(ref attr_ident)) => attr_ident.clone(),
         _ => unreachable!("it not gonna happen."),
     };
     
