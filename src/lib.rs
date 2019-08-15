@@ -48,7 +48,7 @@ pub fn derive_show(item: TokenStream) -> TokenStream {
                     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
                         // #(#get_self),*，这是多重匹配，生成的样子大概是这样：&self.a, &self.b, &self.c, ...
                         // 用法和标准宏有点像，关于多个匹配，可以看这个文档
-                        // https://docs.rs/quote/0.6.11/quote/macro.quote.html
+                        // https://docs.rs/quote/1.0.0/quote/macro.quote.html
                         write!(f, "{} {:?}", stringify!(#struct_name), (#(#get_selfs),*))
                     }
                 }
@@ -82,7 +82,7 @@ pub fn rust_decorator(attr: TokenStream, func: TokenStream) -> TokenStream {
     let params: Vec<_> = func_inputs.iter().map(|i| {
         match i {
             // 提取形参的pattern
-            // https://docs.rs/syn/0.15.26/syn/enum.Pat.html
+            // https://docs.rs/syn/1.0.1/syn/struct.PatType.html
             FnArg::Typed(ref val) => &val.pat, // pat没有办法移出val，只能借用，或者val.pat.clone()
             _ => unreachable!("it's not gonna happen."),
         }
