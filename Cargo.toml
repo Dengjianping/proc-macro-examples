@@ -2,7 +2,7 @@
 name = "proc_macro_example"
 version = "0.1.0"
 authors = ["Jamie <djptux@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 proc-macro = true
